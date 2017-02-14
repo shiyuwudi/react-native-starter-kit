@@ -16,15 +16,9 @@ export class Container extends React.Component {
     this.props.fetchList();
   }
 
-  onChange(value) {
-    this.setState({ value });
-  }
-  clear() {
-    this.setState({ value: '' });
-  }
   render() {
-    const { searchChange, search } = this.props;
-    const { data, searchStr } = this.props.userState;
+    const { searchChange, search, fetchList } = this.props;
+    const { data, currentPage, searchStr, loading } = this.props.goodsState;
     return (
       <View >
         <SearchBar
@@ -32,25 +26,33 @@ export class Container extends React.Component {
           placeholder="输入商品名称／编码"
           keyboardType="web-search"
           onChange={value => searchChange(value)}
-          onCancel={() => searchChange('')}
+          onCancel={() => {
+            searchChange('');
+            fetchList();
+          }}
           onSubmit={value => search(value)}
           showCancelButton={searchStr && searchStr.length > 0}
         />
-        <List data={data} />
+        <List
+          data={data}
+          currentPage={currentPage}
+          loading={loading}
+          fetchList={fetchList}
+        />
       </View>
     );
   }
 }
 
 Container.propTypes = {
-  userState: React.PropTypes.object.isRequired,
+  goodsState: React.PropTypes.object.isRequired,
   fetchList: React.PropTypes.func.isRequired,
   searchChange: React.PropTypes.func.isRequired,
   search: React.PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  userState: state.goodsReducer,
+  goodsState: state.goodsReducer,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(action, dispatch);

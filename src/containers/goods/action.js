@@ -4,13 +4,14 @@ import {
 import {
   actionList,
   actionSearchChange,
-  actionSearch,
+  actionLoading,
 } from './reducer';
 
-export const fetchList = () => (dispatch) => {
-  goodsList({})
+export const fetchList = (para = {}) => (dispatch) => {
+  dispatch(actionLoading());
+  goodsList(para)
     .then((responseJson) => {
-      dispatch(actionList(responseJson.data));
+      dispatch(actionList(responseJson));
     })
     .catch(() => {});
 };
