@@ -55,7 +55,13 @@ export const mFetch = (mUrl, form) => {
     }
     return fetch(`${url}/app${mUrl}`, option);
   })
-    .then(response => response.json())
+    .then(response => {
+      // const r = response.url.split('/');
+      // console.group(r[r.length-1]);
+      // console.log(clone(response).json());
+      // console.groupEnd();
+      return response.json();
+    })
     .catch((err) => {
       // 如果没有找到数据且没有sync方法，
       // 或者有其他异常，则在catch中返回
@@ -71,3 +77,11 @@ export const mFetch = (mUrl, form) => {
       }
     });
 };
+
+function clone(obj) {
+  let newObj = {};
+  for (let key in obj) {
+    newObj[key] = obj[key];
+  }
+  return newObj;
+}

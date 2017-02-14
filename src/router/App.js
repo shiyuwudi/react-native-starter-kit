@@ -7,6 +7,7 @@ import WelcomeContainer from '../containers/welcome/Container';
 import LoginContainer from '../containers/login/Container';
 import IndexContainer from '../containers/tab/Container';
 import GoodsContainer from '../containers/goods/Container';
+import OrderContainer from '../containers/order/Container'
 
 const RouterWithRedux = connect()(Router);
 
@@ -57,6 +58,14 @@ const App = () =>
         key="GoodsContainer"
         component={GoodsContainer}
         title="商品"
+        hideNavBar={false}
+        type={ActionConst.PUSH}
+        hideTabBar
+      />
+      <Scene
+        key="OrderContainer"
+        component={OrderContainer}
+        title="订单"
         hideNavBar={false}
         type={ActionConst.PUSH}
         hideTabBar
