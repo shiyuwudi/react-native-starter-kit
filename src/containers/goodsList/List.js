@@ -3,20 +3,10 @@ import { View, Text, TouchableHighlight, Image, RefreshControl, Dimensions, Styl
 import { ListView } from 'antd-mobile';
 
 import textStyle from '../../style/text';
+import separator from '../../components/Separator';
 
 const { width } = Dimensions.get('window');
 
-const separator = (sectionID, rowID) => (<View
-  key={`${sectionID}-${rowID}`}
-  style={{
-    backgroundColor: '#ddd',
-    height: 0.5,
-    borderStyle: 'solid',
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#ddd',
-  }}
-/>
-);
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',

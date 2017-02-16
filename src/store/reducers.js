@@ -6,3 +6,5 @@ export { default as orderReducer } from '../containers/order/reducer';
 export { default as orderGoodsReducer } from '../containers/order/goods/reducer';
 export { default as goodsReducer } from '../containers/goodsList/reducer';
 export { default as goodsEditReducer } from '../containers/goodsEdit/reducer';
+export { default as goodsBrandListReducer } from '../containers/goodsBrandList/reducer';
+export { default as goodsBrandEditReducer } from '../containers/goodsBrandEdit/reducer';

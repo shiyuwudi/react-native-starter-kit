@@ -1,6 +1,6 @@
 /* tslint:disable:jsx-no-multiline-js */
 import React from 'react';
-import { View, Text, TouchableHighlight, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableHighlight, Image, StyleSheet, RefreshControl } from 'react-native';
 import { ListView } from 'antd-mobile';
 import GoodsList from './goods/GoodsList'
 
@@ -148,38 +148,37 @@ export default React.createClass({
     const row = (obj, sectionID, rowID, highlightRow = (_sId, _rId) => {}) => (
       <View key={rowID}>
         <TouchableHighlight
-            underlayColor={'rgba(100,100,100,0.2)'}
-            style={[{ padding: 8, backgroundColor: 'white' }]}
-            onPress={() => {
-              highlightRow(sectionID, rowID);
-              console.log('222', obj);
-            }}
-          >
-            <View>
+          underlayColor={'rgba(100,100,100,0.2)'}
+          style={[{ padding: 8, backgroundColor: 'white' }]}
+          onPress={() => {
+            fetchEdit({ id: obj.gsGoodsId });
+          }}
+        >
+          <View>
 
-              <View style={styles.titleContainer}>
-                <View>
-                  <Text style={styles.titleLeft}>内部单号：{`${obj.code}（${status[obj.status] || '默认'}）`}</Text>
-                </View>
-                <Image style={styles.titleRight} source={this.getSource(obj.sellerFlag)}/>
-              </View>
-
+            <View style={styles.titleContainer}>
               <View>
-                <GoodsList orderId={obj.id}/>
+                <Text style={styles.titleLeft}>内部单号：{`${obj.code}（${status[obj.status] || '默认'}）`}</Text>
               </View>
+              <Image style={styles.titleRight} source={this.getSource(obj.sellerFlag)}/>
+            </View>
 
-              <View style={styles.footer}>
-                <Text>收货人：{obj.name}</Text>
-                <Text style={styles.money}>￥{obj.totalPrice}</Text>
+            <View>
+              <GoodsList orderId={obj.id}/>
+            </View>
 
-              </View>
+            <View style={styles.footer}>
+              <Text>收货人：{obj.name}</Text>
+              <Text style={styles.money}>￥{obj.totalPrice}</Text>
 
             </View>
-          </TouchableHighlight>
-      </View>
-      );
-    const loadingTxt = this.state.isLoading ? '加载中...' : '加载完毕';
 
+          </View>
+        </TouchableHighlight>
+      </View>
+    );
+    const loadingTxt = this.state.isLoading ? '加载中...' : '加载完毕';
+    const { loading, fetchList, currentPage, fetchEdit } = this.props;
     return (
       <ListView
         dataSource={this.state.dataSource}
@@ -189,9 +188,15 @@ export default React.createClass({
         pageSize={4}
         scrollRenderAheadDistance={500}
         scrollEventThrottle={20}
-        onEndReached={this.onEndReached}
+        onEndReached={() => fetchList({ currentPage: currentPage + 1 })}
         onEndReachedThreshold={10}
         enableEmptySections
+        refreshControl={
+          <RefreshControl
+            refreshing={loading}
+            onRefresh={fetchList}
+          />
+        }
       />
     );
   },

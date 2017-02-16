@@ -9,6 +9,8 @@ import IndexContainer from '../containers/tab/Container';
 import OrderContainer from '../containers/order/Container'
 import GoodsContainer from '../containers/goodsList/Container';
 import GoodsEditContainer from '../containers/goodsEdit/Container';
+import GoodsBrandListContainer from '../containers/goodsBrandList/Container';
+import GoodsBrandEditContainer from '../containers/goodsBrandEdit/Container';
 
 const RouterWithRedux = connect()(Router);
 
@@ -43,7 +45,6 @@ const App = () =>
         key="LoginContainer"
         component={LoginContainer}
         title="登录"
-        hideNavBar={false}
         type={ActionConst.REPLACE}
         hideTabBar
       />
@@ -51,7 +52,6 @@ const App = () =>
         key="IndexContainer"
         component={IndexContainer}
         title="首页"
-        hideNavBar={false}
         type={ActionConst.REPLACE}
         hideTabBar
       />
@@ -61,10 +61,8 @@ const App = () =>
         title="商品"
         onRight={() => { Actions.GoodsEditContainer({ title: '商品新增' }); }}
         rightTitle="新增"
-        hideNavBar={false}
         type={ActionConst.PUSH}
         hideTabBar
-        initial
       />
       <Scene
         key="OrderContainer"
@@ -73,18 +71,33 @@ const App = () =>
         hideNavBar={false}
         type={ActionConst.PUSH}
         hideTabBar
+
       />
       <Scene
         key="GoodsEditContainer"
         component={GoodsEditContainer}
         title="商品新增"
-        hideNavBar={false}
         type={ActionConst.PUSH}
         hideTabBar
       />
+      <Scene
+        key="GoodsBrandListContainer"
+        component={GoodsBrandListContainer}
+        title="商品品牌"
+        onRight={() => { Actions.GoodsBrandEditContainer({ title: '品牌新增' }); }}
+        rightTitle="新增"
+        type={ActionConst.PUSH}
+        hideTabBar
+      />
+      <Scene
+        key="GoodsBrandEditContainer"
+        component={GoodsBrandEditContainer}
+        title="品牌新增"
+        type={ActionConst.PUSH}
+        hideTabBar
 
+      />
     </Scene>
-
   </RouterWithRedux>;
 
 export default App;

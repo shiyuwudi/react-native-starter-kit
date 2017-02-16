@@ -14,12 +14,15 @@ import {
 } from '../goodsEdit/reducer';
 
 export const fetchList = (para = {}) => (dispatch) => {
-  dispatch(actionLoading());
   goodsList(para)
     .then((responseJson) => {
       dispatch(actionList(responseJson));
     })
     .catch(() => {});
+};
+
+export const refreshList = () => (dispatch) => {
+  dispatch(actionLoading());
 };
 
 export const searchChange = value => actionSearchChange(value);

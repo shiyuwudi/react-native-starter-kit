@@ -20,6 +20,10 @@ export default class BasicListExample extends React.Component {
           <Item arrow="horizontal" onClick={() => { Actions.OrderContainer(); }}>订单管理</Item>
           <Item arrow="horizontal" onClick={() => {}}>库存管理</Item>
           <Item arrow="horizontal" onClick={() => {}}>新手向导</Item>
+          <Item
+            arrow="horizontal"
+            onClick={() => { Actions.GoodsBrandListContainer(); }}
+          >品牌管理</Item>
         </List>
       </ScrollView>
     );
