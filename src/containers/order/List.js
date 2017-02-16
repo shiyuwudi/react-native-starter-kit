@@ -2,11 +2,10 @@
 import React from 'react';
 import { View, Text, TouchableHighlight, Image, StyleSheet } from 'react-native';
 import { ListView } from 'antd-mobile';
+import GoodsList from './goods/GoodsList'
 
 const styles = StyleSheet.create({
   titleLeft: {
-    fontSize: 18,
-    fontWeight: '500',
     padding: 2,
   },
   titleRight: {
@@ -29,6 +28,10 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#F6F6F6',
     flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  money: {
+    color: 'red',
   },
 });
 
@@ -49,6 +52,19 @@ const data = [
     des: '不是所有的兼职汪都需要风吹日晒',
   },
 ];
+
+const status = {
+  0: '待审核',
+  5: '已审核',
+  10: '等待分配',
+  15: '已分配',
+  25: '拣货完成',
+  30: '待发货',
+  35: '发货完成',
+  40: '已取消',
+  45: '转单',
+};
+
 const index = data.length - 1;
 
 const NUM_ROWS = 20;
@@ -60,15 +76,15 @@ export default React.createClass({
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
 
-    this.genData = (pIndex = 0) => {
-      const dataBlob = {};
-      for (let i = 0; i < NUM_ROWS; i++) {
-        const ii = (pIndex * NUM_ROWS) + i;
-        dataBlob[`${ii}`] = `row - ${ii}`;
-      }
-      return dataBlob;
-    };
-    this.rData = {};
+    // this.genData = (pIndex = 0) => {
+    //   const dataBlob = {};
+    //   for (let i = 0; i < NUM_ROWS; i++) {
+    //     const ii = (pIndex * NUM_ROWS) + i;
+    //     dataBlob[`${ii}`] = `row - ${ii}`;
+    //   }
+    //   return dataBlob;
+    // };
+    // this.rData = {};
     return {
       dataSource: dataSource.cloneWithRows([]),
       isLoading: false,
@@ -113,6 +129,7 @@ export default React.createClass({
     return src;
   },
 
+
   render() {
     const separator = (sectionID, rowID) => (
       <View
@@ -133,26 +150,28 @@ export default React.createClass({
         <TouchableHighlight
             underlayColor={'rgba(100,100,100,0.2)'}
             style={[{ padding: 8, backgroundColor: 'white' }]}
-            onPress={() => { highlightRow(sectionID, rowID); }}
+            onPress={() => {
+              highlightRow(sectionID, rowID);
+              console.log('222', obj);
+            }}
           >
             <View>
 
               <View style={styles.titleContainer}>
                 <View>
-                  <Text style={styles.titleLeft}>内部单号：{obj.code}</Text>
+                  <Text style={styles.titleLeft}>内部单号：{`${obj.code}（${status[obj.status] || '默认'}）`}</Text>
                 </View>
                 <Image style={styles.titleRight} source={this.getSource(obj.sellerFlag)}/>
               </View>
 
-              <View style={[{ flexDirection: 'row' }]}>
-                <Text >商品信息</Text>
+              <View>
+                <GoodsList orderId={obj.id}/>
               </View>
 
               <View style={styles.footer}>
-                <View>
-                  <Text>收货人：{obj.name}</Text>
-                </View>
-                <Image style={styles.titleRight} source={this.getSource(obj.sellerFlag)}/>
+                <Text>收货人：{obj.name}</Text>
+                <Text style={styles.money}>￥{obj.totalPrice}</Text>
+
               </View>
 
             </View>

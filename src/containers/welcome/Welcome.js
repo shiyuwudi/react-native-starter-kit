@@ -1,18 +1,20 @@
 import React from 'react';
 import {
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    StatusBar,
-    Dimensions,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  StatusBar,
+  Dimensions,
 } from 'react-native';
 
 let { height } = Dimensions.get('window');
 const { width } = Dimensions.get('window');
 
 // android要把状态栏的高度减去才是全屏高度
-if (StatusBar.currentHeight) { height -= StatusBar.currentHeight; }
+if (StatusBar.currentHeight) {
+  height -= StatusBar.currentHeight;
+}
 
 const styles = StyleSheet.create({
   fullScreen: {
@@ -77,14 +79,14 @@ const Welcome = ({ img, text }) =>
             <Text
               style={styles.textLargeWhite}
             >
-            知乎日报
+              知乎日报
             </Text>
             <Text
               style={[styles.textNormalWhite, {
                 marginTop: 6,
               }]}
             >
-            每日三次，每次七分钟
+              每日三次，每次七分钟
             </Text>
           </View>
         </View>

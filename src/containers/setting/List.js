@@ -1,6 +1,6 @@
 /* tslint:disable:jsx-no-multiline-js */
 import React from 'react';
-import { Image, ScrollView, View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { List } from 'antd-mobile';
 import { Actions } from 'react-native-router-flux';
 
@@ -19,6 +19,7 @@ export default class BasicListExample extends React.Component {
           <Item arrow="horizontal" onClick={() => { Actions.GoodsContainer(); }}>商品管理</Item>
           <Item arrow="horizontal" onClick={() => { Actions.OrderContainer(); }}>订单管理</Item>
           <Item arrow="horizontal" onClick={() => {}}>库存管理</Item>
+          <Item arrow="horizontal" onClick={() => {}}>新手向导</Item>
         </List>
       </ScrollView>
     );

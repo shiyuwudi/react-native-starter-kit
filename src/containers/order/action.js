@@ -19,7 +19,7 @@ export const searchChange = value => actionSearchChange(value);
 
 
 export const search = value => (dispatch) => {
-  goodsList({ goodsName: value })
+  orderList({ thirdCode: value })
     .then((responseJson) => {
       dispatch(actionList(responseJson.data));
     })

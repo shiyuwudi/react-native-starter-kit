@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { TabBar } from 'antd-mobile';
 import { Actions } from 'react-native-router-flux';
 
@@ -22,13 +22,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const renderContent = (pageText, num) => (
+const renderContent = () => (
   <View
     style={{ flex: 1, backgroundColor: '#f5f5f9' }}
   />);
 
 
-const Login = ({ currentTab, changeCurrentTab }) => (
+const Tab = ({ currentTab, changeCurrentTab }) => (
   <View style={styles.container}>
     <TabBar
       unselectedTintColor="#949494"
@@ -99,5 +99,9 @@ const Login = ({ currentTab, changeCurrentTab }) => (
   </View>
 );
 
+Tab.propTypes = {
+  currentTab: React.PropTypes.string.isRequired,
+  changeCurrentTab: React.PropTypes.func.isRequired,
+};
 
-export default (Login);
+export default (Tab);

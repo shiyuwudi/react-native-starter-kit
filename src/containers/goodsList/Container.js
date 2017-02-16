@@ -17,7 +17,7 @@ export class Container extends React.Component {
   }
 
   render() {
-    const { searchChange, search, fetchList } = this.props;
+    const { searchChange, search, fetchList, fetchEdit } = this.props;
     const { data, currentPage, searchStr, loading } = this.props.goodsState;
     return (
       <View >
@@ -38,6 +38,7 @@ export class Container extends React.Component {
           currentPage={currentPage}
           loading={loading}
           fetchList={fetchList}
+          fetchEdit={fetchEdit}
         />
       </View>
     );
@@ -47,6 +48,7 @@ export class Container extends React.Component {
 Container.propTypes = {
   goodsState: React.PropTypes.object.isRequired,
   fetchList: React.PropTypes.func.isRequired,
+  fetchEdit: React.PropTypes.func.isRequired,
   searchChange: React.PropTypes.func.isRequired,
   search: React.PropTypes.func.isRequired,
 };

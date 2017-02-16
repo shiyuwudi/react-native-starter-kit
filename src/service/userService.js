@@ -1,4 +1,4 @@
-import { url, form2Form, mFetch } from './utils';
+import { url, form2Form } from './utils';
 
 export const userLogin = (form) => {
   form.isMobile = true;

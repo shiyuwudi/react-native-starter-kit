@@ -9,7 +9,7 @@ export const login = (data) => {
   data.isMobile = true;
   return userLogin(data)
     .then((responseJson) => {
-      if (parseInt(responseJson.code) === 100) {
+      if (parseInt(responseJson.code, 0) === 100) {
         delete responseJson.code;
         const storage = global.storage;
         // 使用key来保存数据。这些数据一般是全局独有的，常常需要调用的。
@@ -30,15 +30,15 @@ export const login = (data) => {
         );
       }
     })
-    .catch((err) => {
+    .catch(() => {
       Alert.alert('错误',
-        '登录失败，请重试', [{
-          text: '确定',
-          style: 'cancel',
-        }], {
-          cancelable: false,
-        },
-      );
+          '登录失败，请重试', [{
+            text: '确定',
+            style: 'cancel',
+          }], {
+            cancelable: false,
+          },
+        );
     },
     );
 };

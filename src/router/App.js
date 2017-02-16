@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Platform } from 'react-native';
-import { Router, Scene, ActionConst } from 'react-native-router-flux';
+import { Router, Scene, ActionConst, Actions } from 'react-native-router-flux';
 
 import WelcomeContainer from '../containers/welcome/Container';
 import LoginContainer from '../containers/login/Container';
 import IndexContainer from '../containers/tab/Container';
-import GoodsContainer from '../containers/goods/Container';
 import OrderContainer from '../containers/order/Container'
+import GoodsContainer from '../containers/goodsList/Container';
+import GoodsEditContainer from '../containers/goodsEdit/Container';
 
 const RouterWithRedux = connect()(Router);
 
@@ -21,7 +22,8 @@ const getSceneStyle = (/* NavigationSceneRendererProps */ props, computedProps) 
     shadowRadius: null,
   };
   if (computedProps.isActive) {
-    style.marginTop = computedProps.hideNavBar ? 0 : Platform.OS === 'android' ? 54 : 64;
+    const deviceTop = Platform.OS === 'android' ? 54 : 64;
+    style.marginTop = computedProps.hideNavBar ? 0 : deviceTop;
     style.marginBottom = computedProps.hideTabBar ? 0 : 50;
   }
   return style;
@@ -44,7 +46,6 @@ const App = () =>
         hideNavBar={false}
         type={ActionConst.REPLACE}
         hideTabBar
-        initial
       />
       <Scene
         key="IndexContainer"
@@ -58,9 +59,12 @@ const App = () =>
         key="GoodsContainer"
         component={GoodsContainer}
         title="商品"
+        onRight={() => { Actions.GoodsEditContainer({ title: '商品新增' }); }}
+        rightTitle="新增"
         hideNavBar={false}
         type={ActionConst.PUSH}
         hideTabBar
+        initial
       />
       <Scene
         key="OrderContainer"
@@ -70,7 +74,17 @@ const App = () =>
         type={ActionConst.PUSH}
         hideTabBar
       />
+      <Scene
+        key="GoodsEditContainer"
+        component={GoodsEditContainer}
+        title="商品新增"
+        hideNavBar={false}
+        type={ActionConst.PUSH}
+        hideTabBar
+      />
+
     </Scene>
+
   </RouterWithRedux>;
 
 export default App;

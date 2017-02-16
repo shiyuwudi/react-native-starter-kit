@@ -15,13 +15,6 @@ export class Container extends React.Component {
     super(props);
     this.props.fetchList();
   }
-
-  onChange(value) {
-    this.setState({ value });
-  }
-  clear() {
-    this.setState({ value: '' });
-  }
   render() {
     const { searchChange, search } = this.props;
     const { data, searchStr } = this.props.userState;
@@ -29,7 +22,7 @@ export class Container extends React.Component {
       <View >
         <SearchBar
           value={searchStr}
-          placeholder="输入商品名称／编码"
+          placeholder="输入外部单号"
           keyboardType="web-search"
           onChange={value => searchChange(value)}
           onCancel={() => searchChange('')}

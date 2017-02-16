@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableHighlight, Image, RefreshControl, Dimensions, StyleSheet } from 'react-native';
 import { ListView } from 'antd-mobile';
+
 import textStyle from '../../style/text';
 
 const { width } = Dimensions.get('window');
@@ -54,12 +55,16 @@ export default class List extends React.Component {
   }
 
   render() {
-    const row = (obj, sectionID, rowID, highlightRow = (_sId, _rId) => {}) => (
+    const { loading, fetchList, currentPage, fetchEdit } = this.props;
+
+    const row = (obj, sectionID, rowID) => (
       <View key={rowID}>
         <TouchableHighlight
           underlayColor={'rgba(100,100,100,0.2)'}
           style={[{ backgroundColor: 'white' }]}
-          onPress={() => { highlightRow(sectionID, rowID); }}
+          onPress={() => {
+            fetchEdit({ id: obj.gsGoodsId });
+          }}
         >
           <View style={styles.row}>
             <Image
@@ -85,9 +90,8 @@ export default class List extends React.Component {
           </View>
         </TouchableHighlight>
       </View>
-      );
+    );
 
-    const { loading, fetchList, currentPage } = this.props;
     return (
       <ListView
         refreshControl={
@@ -114,6 +118,7 @@ export default class List extends React.Component {
 List.propTypes = {
   loading: React.PropTypes.bool.isRequired,
   fetchList: React.PropTypes.func.isRequired,
+  fetchEdit: React.PropTypes.func.isRequired,
   data: React.PropTypes.array.isRequired,
   currentPage: React.PropTypes.number,
 };

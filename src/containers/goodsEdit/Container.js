@@ -3,16 +3,16 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as action from './action';
-import Login from './Login';
-
+import Edit from './Edit';
 
 export class Container extends React.Component {
 
+
   render() {
-    const { edit } = this.props.loginState;
+    const { edit } = this.props.goodsEditState;
     const { onFieldsChange } = this.props;
     return (
-      <Login
+      <Edit
         edit={edit}
         onFieldsChange={onFieldsChange}
       />
@@ -22,12 +22,12 @@ export class Container extends React.Component {
 
 
 Container.propTypes = {
-  loginState: React.PropTypes.object.isRequired,
+  goodsEditState: React.PropTypes.object.isRequired,
   onFieldsChange: React.PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  loginState: state.loginReducer,
+  goodsEditState: state.goodsEditReducer,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(action, dispatch);
