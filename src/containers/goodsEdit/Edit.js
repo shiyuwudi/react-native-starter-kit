@@ -1,29 +1,10 @@
 import React from 'react';
-import { View, Alert, ScrollView } from 'react-native';
-import { Button, WhiteSpace, WingBlank, InputItem, Switch, List } from 'antd-mobile';
+import { ScrollView } from 'react-native';
+import { WhiteSpace, InputItem, Switch, List } from 'antd-mobile';
 import { createForm } from 'rc-form';
-import { Actions } from 'react-native-router-flux';
 
 
-const formSubmit = (form) => {
-  form.validateFields((err, values) => {
-    if (!err) {
-      // GoodsEdit(values);
-      return;
-    }
-    const keys = Object.keys(err);
-    Alert.alert('',
-      `${err[keys[0]].errors[0].message}`, [{
-        text: '确定',
-        style: 'cancel',
-      }], {
-        cancelable: false,
-      },
-    );
-  });
-};
-
-const GoodsEdit = ({ form, form: { getFieldProps } }) => (
+const GoodsEdit = ({ form: { getFieldProps } }) => (
   <ScrollView
     style={{ flex: 1, backgroundColor: '#f5f5f9' }}
     automaticallyAdjustContentInsets={false}

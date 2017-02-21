@@ -3,32 +3,31 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as action from './action';
-import Edit from './Edit';
+import Index from './Index';
 
 export class Container extends React.Component {
 
+
   render() {
-    const { edit, saving } = this.props.goodsBrandEditState;
-    const { onFieldsChange, fetchSave } = this.props;
+    const { edit } = this.props.indexState;
+    const { onFieldsChange } = this.props;
     return (
-      <Edit
+      <Index
         edit={edit}
         onFieldsChange={onFieldsChange}
-        fetchSave={fetchSave}
-        saving={saving}
       />
     );
   }
 }
 
+
 Container.propTypes = {
-  goodsBrandEditState: React.PropTypes.object.isRequired,
+  indexState: React.PropTypes.object.isRequired,
   onFieldsChange: React.PropTypes.func.isRequired,
-  fetchSave: React.PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  goodsBrandEditState: state.goodsBrandEditReducer,
+  indexState: state.indexReducer,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(action, dispatch);

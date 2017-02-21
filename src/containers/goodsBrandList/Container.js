@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import {
   View,
 } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 
 import * as action from './action';
 import List from './List';
@@ -15,8 +16,17 @@ export class Container extends React.Component {
     this.props.fetchList();
   }
 
+  componentWillMount() {
+    Actions.refresh({ onRight: this.add.bind(this), rightTitle: '新增' });
+  }
+
+  add() {
+    Actions.GoodsBrandEditContainer({ title: '品牌新增' });
+    this.props.fetchAdd();
+  }
+
   render() {
-    const { fetchList, fetchEdit, refreshList } = this.props;
+    const { fetchList, fetchEdit, refreshList, fetchDel } = this.props;
     const { data, currentPage, loading } = this.props.goodsBrandState;
     return (
       <View >
@@ -31,6 +41,7 @@ export class Container extends React.Component {
             refreshList();
             fetchList();
           }}
+          fetchDel={fetchDel}
         />
       </View>
     );
@@ -42,6 +53,8 @@ Container.propTypes = {
   fetchList: React.PropTypes.func.isRequired,
   refreshList: React.PropTypes.func.isRequired,
   fetchEdit: React.PropTypes.func.isRequired,
+  fetchAdd: React.PropTypes.func.isRequired,
+  fetchDel: React.PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({

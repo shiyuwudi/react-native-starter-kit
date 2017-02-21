@@ -17,7 +17,7 @@ export class Container extends React.Component {
   }
 
   render() {
-    const { searchChange, search, fetchList, fetchEdit } = this.props;
+    const { searchChange, search, fetchList, fetchEdit, refreshList } = this.props;
     const { data, currentPage, searchStr, loading } = this.props.goodsState;
     return (
       <View >
@@ -35,10 +35,15 @@ export class Container extends React.Component {
         />
         <List
           data={data}
-          currentPage={currentPage}
           loading={loading}
-          fetchList={fetchList}
           fetchEdit={fetchEdit}
+          onEndReached={() => {
+            fetchList({ currentPage: currentPage + 1 });
+          }}
+          onRefresh={() => {
+            refreshList();
+            fetchList();
+          }}
         />
       </View>
     );
@@ -51,6 +56,7 @@ Container.propTypes = {
   fetchEdit: React.PropTypes.func.isRequired,
   searchChange: React.PropTypes.func.isRequired,
   search: React.PropTypes.func.isRequired,
+  refreshList: React.PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({

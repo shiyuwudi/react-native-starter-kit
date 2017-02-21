@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { TabBar } from 'antd-mobile';
 import { Actions } from 'react-native-router-flux';
 
+import IndexContainer from '../index/Container';
 import SettingContainer from '../setting/Container';
 
 const styles = StyleSheet.create({
@@ -45,7 +46,7 @@ const Tab = ({ currentTab, changeCurrentTab }) => (
           Actions.refresh({ title: '首页' });
         }}
       >
-        <SettingContainer />
+        <IndexContainer />
       </TabBar.Item>
       <TabBar.Item
         title="销售"
@@ -57,7 +58,7 @@ const Tab = ({ currentTab, changeCurrentTab }) => (
           Actions.refresh({ title: '销售' });
         }}
       >
-        {renderContent('生活 Tab')}
+        <SettingContainer />
       </TabBar.Item>
       <TabBar.Item
         title="库存"

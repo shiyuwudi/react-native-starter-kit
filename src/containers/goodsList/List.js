@@ -1,9 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableHighlight, Image, RefreshControl, Dimensions, StyleSheet } from 'react-native';
-import { ListView } from 'antd-mobile';
+import { View, Text, TouchableHighlight, Image, Dimensions, StyleSheet } from 'react-native';
 
-import textStyle from '../../style/text';
-import separator from '../../components/Separator';
+import textStyle from '../../styles/text';
+import RefreshableListview from '../../components/RefreshableListview';
 
 const { width } = Dimensions.get('window');
 
@@ -22,30 +21,11 @@ const styles = StyleSheet.create({
   },
 });
 
+
 export default class List extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-    this.dataSource = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
-    });
-
-    this.state = {
-      dataSource: this.dataSource.cloneWithRows([]),
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.data !== nextProps.data) {
-      this.setState({
-        dataSource: this.dataSource.cloneWithRows(nextProps.data),
-      });
-    }
-  }
-
   render() {
-    const { loading, fetchList, currentPage, fetchEdit } = this.props;
+    const { loading, fetchEdit, data, onEndReached, onRefresh } = this.props;
 
     const row = (obj, sectionID, rowID) => (
       <View key={rowID}>
@@ -81,34 +61,22 @@ export default class List extends React.Component {
         </TouchableHighlight>
       </View>
     );
-
     return (
-      <ListView
-        refreshControl={
-          <RefreshControl
-            refreshing={loading}
-            onRefresh={fetchList}
-          />
-        }
-        renderSeparator={separator}
-        dataSource={this.state.dataSource}
+      <RefreshableListview
+        loading={loading}
+        data={data}
+        onRefresh={onRefresh}
+        onEndReached={onEndReached}
         renderRow={row}
-        pageSize={20}
-        scrollRenderAheadDistance={500}
-        scrollEventThrottle={20}
-        onEndReached={() => fetchList({ currentPage: currentPage + 1 })}
-        onEndReachedThreshold={10}
-        enableEmptySections
       />
     );
   }
 }
 
-
 List.propTypes = {
   loading: React.PropTypes.bool.isRequired,
-  fetchList: React.PropTypes.func.isRequired,
   fetchEdit: React.PropTypes.func.isRequired,
   data: React.PropTypes.array.isRequired,
-  currentPage: React.PropTypes.number,
+  onEndReached: React.PropTypes.func.isRequired,
+  onRefresh: React.PropTypes.func.isRequired,
 };

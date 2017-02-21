@@ -1,10 +1,12 @@
 import React from 'react';
-import { View, Text, TouchableHighlight, RefreshControl, StyleSheet } from 'react-native';
+import { View, Text, RefreshControl, StyleSheet } from 'react-native';
 import { ListView } from 'antd-mobile';
+
+import ListItemOperation from '../../components/ListItemOperation';
 
 import Separator from '../../components/Separator';
 import Arrow from '../../components/Arrow';
-import textStyle from '../../style/text';
+import textStyle from '../../styles/text';
 
 const styles = StyleSheet.create({
   list: {
@@ -19,39 +21,28 @@ const styles = StyleSheet.create({
   },
 });
 
+const dataSource = new ListView.DataSource({
+  rowHasChanged: (row1, row2) => row1 !== row2,
+});
+
 export default class List extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-    this.dataSource = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
-    });
-
-    this.state = {
-      dataSource: this.dataSource.cloneWithRows([]),
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.data !== nextProps.data) {
-      this.setState({
-        dataSource: this.dataSource.cloneWithRows(nextProps.data),
-      });
-    }
-  }
-
   render() {
-    const { loading, fetchEdit, onEndReached, onRefresh } = this.props;
+    const { loading, fetchEdit, onEndReached, onRefresh, fetchDel, data } = this.props;
 
     const row = (obj, sectionID, rowID) => (
       <View key={rowID}>
-        <TouchableHighlight
-          underlayColor={'rgba(100,100,100,0.2)'}
-          style={[{ backgroundColor: 'white' }]}
+        <ListItemOperation
           onPress={() => {
             fetchEdit({ id: obj.id });
           }}
+          operation={[
+            {
+              text: '删除',
+              onPress: () => { fetchDel({ ids: obj.id }); },
+              backgroundColor: '#F4333C',
+            },
+          ]}
         >
           <View style={styles.row}>
             <Text
@@ -60,7 +51,7 @@ export default class List extends React.Component {
             >{obj.goodsBrandName}</Text>
             <Arrow />
           </View>
-        </TouchableHighlight>
+        </ListItemOperation>
       </View>
     );
     const refreshControl = (<RefreshControl
@@ -72,7 +63,7 @@ export default class List extends React.Component {
         style={styles.list}
         refreshControl={refreshControl}
         renderSeparator={Separator}
-        dataSource={this.state.dataSource}
+        dataSource={dataSource.cloneWithRows(data)}
         renderRow={row}
         scrollRenderAheadDistance={500}
         scrollEventThrottle={20}
@@ -89,5 +80,6 @@ List.propTypes = {
   onEndReached: React.PropTypes.func.isRequired,
   onRefresh: React.PropTypes.func.isRequired,
   fetchEdit: React.PropTypes.func.isRequired,
+  fetchDel: React.PropTypes.func.isRequired,
   data: React.PropTypes.array.isRequired,
 };

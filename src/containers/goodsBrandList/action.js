@@ -3,6 +3,7 @@ import { Actions } from 'react-native-router-flux';
 import {
   goodsBrandList,
   goodsBrandLoad,
+  goodsBrandDel,
 } from '../../service/goodsBrandService';
 import {
   actionList,
@@ -29,4 +30,16 @@ export const fetchEdit = (para = {}) => (dispatch) => {
       dispatch(actionLoad(responseJson.data));
     })
     .catch(() => {});
+};
+
+export const fetchAdd = () => actionLoad({});
+
+export const fetchDel = (para = {}) => (dispatch) => {
+  if (para.ids) {
+    goodsBrandDel(para)
+  .then((responseJson) => {
+    dispatch(actionList(responseJson));
+  })
+    .catch(() => {});
+  }
 };
