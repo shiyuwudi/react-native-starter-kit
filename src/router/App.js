@@ -6,7 +6,7 @@ import { Router, Scene, ActionConst, Actions } from 'react-native-router-flux';
 import WelcomeContainer from '../containers/welcome/Container';
 import LoginContainer from '../containers/login/Container';
 import IndexContainer from '../containers/tab/Container';
-import OrderContainer from '../containers/order/Container'
+import OrderContainer from '../containers/order/Container';
 import GoodsContainer from '../containers/goodsList/Container';
 import GoodsEditContainer from '../containers/goodsEdit/Container';
 import GoodsBrandListContainer from '../containers/goodsBrandList/Container';

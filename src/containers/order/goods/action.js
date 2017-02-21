@@ -4,7 +4,6 @@ import {
 import {
   actionList,
   actionSearchChange,
-  actionSearch,
 } from './reducer';
 
 export const fetchList = (par = {}) => (dispatch) => {

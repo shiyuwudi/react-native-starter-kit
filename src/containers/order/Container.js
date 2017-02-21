@@ -16,34 +16,47 @@ export class Container extends React.Component {
     this.props.fetchList();
   }
   render() {
-    const { searchChange, search } = this.props;
-    const { data, searchStr } = this.props.userState;
+    const { searchChange, search, fetchList, fetchEdit } = this.props;
+    const { data, currentPage, searchStr, loading } = this.props.goodsState;
+
     return (
       <View >
+
         <SearchBar
           value={searchStr}
           placeholder="输入外部单号"
           keyboardType="web-search"
           onChange={value => searchChange(value)}
-          onCancel={() => searchChange('')}
+          onCancel={() => {
+            searchChange('');
+            fetchList();
+          }}
           onSubmit={value => search(value)}
           showCancelButton={searchStr && searchStr.length > 0}
         />
-        <List data={data} />
+
+        <List
+          data={data}
+          currentPage={currentPage}
+          loading={loading}
+          fetchList={fetchList}
+          fetchEdit={fetchEdit}
+        />
       </View>
     );
   }
 }
 
 Container.propTypes = {
-  userState: React.PropTypes.object.isRequired,
+  goodsState: React.PropTypes.object.isRequired,
   fetchList: React.PropTypes.func.isRequired,
+  fetchEdit: React.PropTypes.func.isRequired,
   searchChange: React.PropTypes.func.isRequired,
   search: React.PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  userState: state.orderReducer,
+  goodsState: state.orderReducer,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(action, dispatch);

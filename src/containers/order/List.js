@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, TouchableHighlight, Image, StyleSheet, RefreshControl } from 'react-native';
 import { ListView } from 'antd-mobile';
-import GoodsList from './goods/GoodsList'
+import GoodsList from './goods/GoodsListContainer';
 
 const styles = StyleSheet.create({
   titleLeft: {
@@ -35,24 +35,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const data = [
-  {
-    img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
-    title: '相约酒店',
-    des: '不是所有的兼职汪都需要风吹日晒',
-  },
-  {
-    img: 'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png',
-    title: '麦当劳邀您过周末',
-    des: '不是所有的兼职汪都需要风吹日晒',
-  },
-  {
-    img: 'https://zos.alipayobjects.com/rmsportal/hfVtzEhPzTUewPm.png',
-    title: '食惠周',
-    des: '不是所有的兼职汪都需要风吹日晒',
-  },
-];
-
 const status = {
   0: '待审核',
   5: '已审核',
@@ -65,72 +47,44 @@ const status = {
   45: '转单',
 };
 
-const index = data.length - 1;
+const rowHasChanged = (r1, r2) => r1 !== r2;
+const ds = new ListView.DataSource({ rowHasChanged });
 
-const NUM_ROWS = 20;
-const pageIndex = 0;
+const getSource = (value) => {
+  let src = require('../../../images/op_memo/op_memo_0.png');
+  switch (value) {
+    case '1':
+      src = require('../../../images/op_memo/op_memo_1.png');
+      break;
+    case '2':
+      src = require('../../../images/op_memo/op_memo_2.png');
+      break;
+    case '3':
+      src = require('../../../images/op_memo/op_memo_3.png');
+      break;
+    case '4':
+      src = require('../../../images/op_memo/op_memo_4.png');
+      break;
+    case '5':
+      src = require('../../../images/op_memo/op_memo_5.png');
+      break;
+    default:
+      break;
+  }
+  return src;
+};
 
-export default React.createClass({
-  getInitialState() {
-    const dataSource = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
-    });
-
-    // this.genData = (pIndex = 0) => {
-    //   const dataBlob = {};
-    //   for (let i = 0; i < NUM_ROWS; i++) {
-    //     const ii = (pIndex * NUM_ROWS) + i;
-    //     dataBlob[`${ii}`] = `row - ${ii}`;
-    //   }
-    //   return dataBlob;
-    // };
-    // this.rData = {};
-    return {
-      dataSource: dataSource.cloneWithRows([]),
+class List extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       isLoading: false,
     };
-  },
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.data !== nextProps.data) {
-      let dataSource = new ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1 !== row2,
-      });
-      dataSource = dataSource.cloneWithRows(nextProps.data);
-      this.setState({
-        dataSource,
-      });
-    }
-  },
-
-  onEndReached() {
-    // load new data
-
-  },
-  getSource(value){
-    let src = require('../../../images/op_memo/op_memo_0.png');
-    switch (value) {
-      case '1':
-        src = require('../../../images/op_memo/op_memo_1.png');
-        break;
-      case '2':
-        src = require('../../../images/op_memo/op_memo_2.png');
-        break;
-      case '3':
-        src = require('../../../images/op_memo/op_memo_3.png');
-        break;
-      case '4':
-        src = require('../../../images/op_memo/op_memo_4.png');
-        break;
-      case '5':
-        src = require('../../../images/op_memo/op_memo_5.png');
-        break;
-    }
-    return src;
-  },
-
+  }
 
   render() {
+    const loadingTxt = this.state.isLoading ? '加载中...' : '加载完毕';
+    const { loading, fetchList, currentPage, fetchEdit } = this.props;
     const separator = (sectionID, rowID) => (
       <View
         key={`${sectionID}-${rowID}`}
@@ -145,7 +99,7 @@ export default React.createClass({
         }}
       />
     );
-    const row = (obj, sectionID, rowID, highlightRow = (_sId, _rId) => {}) => (
+    const row = (obj, sectionID, rowID = () => {}) => (
       <View key={rowID}>
         <TouchableHighlight
           underlayColor={'rgba(100,100,100,0.2)'}
@@ -160,11 +114,11 @@ export default React.createClass({
               <View>
                 <Text style={styles.titleLeft}>内部单号：{`${obj.code}（${status[obj.status] || '默认'}）`}</Text>
               </View>
-              <Image style={styles.titleRight} source={this.getSource(obj.sellerFlag)}/>
+              <Image style={styles.titleRight} source={getSource(obj.sellerFlag)} />
             </View>
 
             <View>
-              <GoodsList orderId={obj.id}/>
+              <GoodsList orderId={obj.id} />
             </View>
 
             <View style={styles.footer}>
@@ -177,11 +131,9 @@ export default React.createClass({
         </TouchableHighlight>
       </View>
     );
-    const loadingTxt = this.state.isLoading ? '加载中...' : '加载完毕';
-    const { loading, fetchList, currentPage, fetchEdit } = this.props;
     return (
       <ListView
-        dataSource={this.state.dataSource}
+        dataSource={ds.cloneWithRows(this.props.data || [])}
         renderFooter={() => <Text style={{ padding: 30, textAlign: 'center' }}> {loadingTxt} </Text>}
         renderRow={row}
         renderSeparator={separator}
@@ -199,8 +151,17 @@ export default React.createClass({
         }
       />
     );
-  },
-});
+  }
+}
+
+List.propTypes = {
+  loading: React.PropTypes.bool.isRequired,
+  fetchList: React.PropTypes.func.isRequired,
+  currentPage: React.PropTypes.number.isRequired,
+  fetchEdit: React.PropTypes.func.isRequired,
+  data: React.PropTypes.array.isRequired,
+};
 
 export const title = 'ListView Row';
 export const description = 'ListView Row example';
+export default List;

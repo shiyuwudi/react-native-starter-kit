@@ -1,19 +1,16 @@
 /**
- * Created by shiyuwudi on 2017/2/14.
+ * Created by shiyuwudi on 2017/2/20.
  */
 
 import React from 'react';
 import { View, Text, TouchableHighlight, Image, StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as action from './action';
 
 const styles = StyleSheet.create({
 
   container: {
     flexDirection: 'row',
   },
-  goodsImage:{
+  goodsImage: {
     width: 80,
     height: 80,
   },
@@ -31,21 +28,26 @@ const styles = StyleSheet.create({
   },
 });
 
-const Goods = ({goods}) => (
+const Goods = ({ goods }) => (
   <View>
 
     <View style={styles.container}>
 
       {
-        goods.imgPath ? (
-            <Image
-              defaultSource={require('../../../../images/busi.png')}
-              source={{uri: goods.imgPath}}
-              style={styles.goodsImage}
-            />
-          ) : (
-            <Image style={styles.goodsImage} source={require('../../../../images/busi.png')}/>
-          )
+        (() => {
+          if (goods.imgPath) {
+            return (
+              <Image
+                defaultSource={require('../../../../images/busi.png')}
+                source={{ uri: goods.imgPath }}
+                style={styles.goodsImage}
+              />
+            );
+          }
+          return (
+            <Image style={styles.goodsImage} source={require('../../../../images/busi.png')} />
+          );
+        })()
       }
 
 
@@ -66,7 +68,6 @@ const Goods = ({goods}) => (
       </View>
 
 
-
     </View>
 
     <View style={styles.separator} />
@@ -74,7 +75,11 @@ const Goods = ({goods}) => (
   </View>
 );
 
-const Expand = ({open, onClick, visible}) => visible && (
+Goods.propTypes = {
+  goods: React.PropTypes.object.isRequired,
+};
+
+const Expand = ({ open, onClick, visible }) => visible && (
   <View>
     <TouchableHighlight onPress={onClick}>
       <Text style={styles.expand}>
@@ -86,41 +91,30 @@ const Expand = ({open, onClick, visible}) => visible && (
   </View>
 );
 
-const GoodsList = ({allGoods, maxCount, open, onOpenClick}) => {
+Expand.propTypes = {
+  open: React.PropTypes.bool.isRequired,
+  onClick: React.PropTypes.func.isRequired,
+  visible: React.PropTypes.bool.isRequired,
+};
+
+const GoodsList = ({ allGoods, maxCount, open, onOpenClick }) => {
   const count = allGoods.length;
   const data = (count > maxCount && !open) ? allGoods.slice(0, maxCount) : allGoods;
   return (
     <View>
       {
-        data.map((goods, i) => <Goods goods={goods} key={i}/>)
+        data.map(goods => <Goods goods={goods} key={goods.id} />)
       }
-      <Expand visible={count > maxCount} open={open} onClick={onOpenClick}/>
+      <Expand visible={count > maxCount} open={open} onClick={onOpenClick} />
     </View>
   );
 };
 
-class GoodsListContainer extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      open: false,
-    };
-  }
-  componentDidMount(){
-    this.props.fetchList({orderId: this.props.orderId});
-  }
-  render(){
-    return (
-      <GoodsList
-        allGoods={this.props.data}
-        maxCount={1}
-        open={this.state.open}
-        onOpenClick={()=>this.setState({open: !this.state.open})}
-      />
-    );
-  }
-}
+GoodsList.propTypes = {
+  allGoods: React.PropTypes.array.isRequired,
+  maxCount: React.PropTypes.number.isRequired,
+  open: React.PropTypes.bool.isRequired,
+  onOpenClick: React.PropTypes.func.isRequired,
+};
 
-const mapStateToProps = (state, props) => ({ data: state.orderGoodsReducer[props.orderId] || [] });
-const mapDispatchToProps = dispatch => bindActionCreators(action, dispatch);
-export default connect(mapStateToProps, mapDispatchToProps)(GoodsListContainer);
+export default GoodsList;
